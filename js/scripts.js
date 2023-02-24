@@ -20,14 +20,15 @@ $(function(){
             icone_clima:""
         };
 
-
-        function preencherClimaAgora(cidade,estado,pais,temperatura,texto_clima,icone_clima){
+        function preencherClimaAgora(cidade, estado,pais,temperatura,texto_clima,icone_clima){
             var texto_local = cidade + ". " + estado + ". " + pais;
+
             $("#texto_local").text(texto_local);
             $("#texto_clima").text(texto_clima);
-            $("#texto_temperatura").html(String(temperatura)+ "&deg");
-        }
+            $("#texto_temperatura").html(String(temperatura)+"&deg");
+            $("#icone_clima").css("background-image","url('" + weatherObj.icone_clima + " ')" );
 
+        }
 
         function pegarTempoAtual(localCode){
 
@@ -42,9 +43,11 @@ $(function(){
 
                     weatherObj.texto_clima = data[0].WeatherText;
 
-                    weatherObj.icone_clima="";
+                    var iconNumber = data[0].WeatherIcon <= 9? "0"+ String(data[0].WeatherIcon) :String(data[0].WeatherIcon)
 
-                   preencherClimaAgora(weatherObj.cidade,  weatherObj.estado, weatherObj.pais, weatherObj.temperatura, weatherObj.texto_clima, weatherObj.icone_clima);
+                    weatherObj.icone_clima="https://developer.accuweather.com/sites/default/files/"+ iconNumber +"-s.png";
+
+                   preencherClimaAgora(weatherObj.cidade,  weatherObj.estado,weatherObj.pais, weatherObj.temperatura, weatherObj.texto_clima, weatherObj.icone_clima);
 
                    
                 },
@@ -53,7 +56,6 @@ $(function(){
                 }
             });
         }
-
 
         function pegarLocalUsuario(lat,long){
             $.ajax({
@@ -83,12 +85,14 @@ $(function(){
                 }
             });
         }
+
+        
         
 
         function pegarCordenadasDoIp(){
 
-            var lat_padrao = -23.62354;
-            var long_padrao = -46.66964;
+            var lat_padrao =-23.616;
+            var long_padrao =-46.636;
 
             $.ajax({
                 url:"http://www.geoplugin.net/json.gp",
@@ -96,21 +100,19 @@ $(function(){
                 dataType:"json",
 
                 success: function(data){
-                    if(data.geoplugin_latitude && data.geoplugin_longitude ){
-                        pegarLocalUsuario(data.geoplugin_latitude,data.geoplugin_longitude)
+                    if(data.Latitude && data.Longitude ){
+                        pegarLocalUsuario(data.Latitude,data.Longitude)
                     }else{
                         pegarLocalUsuario(lat_padrao,long_padrao);
                     }
                 },
 
                 error: function(){
-                    console.log("Error");
-                    pegarLocalUsuario(lat_padrao,long_padrao);
+                    console.log("Error")
                 }
             });
         }
-
         pegarCordenadasDoIp();
-       
+
 
     });
