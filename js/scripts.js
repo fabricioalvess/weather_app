@@ -90,9 +90,9 @@ $(function(){
         
 
         function pegarCordenadasDoIp(){
-
-            var lat_padrao =-23.616;
-            var long_padrao =-46.636;
+           // , 
+            var lat_padrao =-24.156619831043763;
+            var long_padrao =-46.78810958867326;
 
             $.ajax({
                 url:"http://www.geoplugin.net/json.gp",
@@ -101,6 +101,7 @@ $(function(){
 
                 success: function(data){
                     if(data.Latitude && data.Longitude ){
+                       
                         pegarLocalUsuario(data.Latitude,data.Longitude)
                     }else{
                         pegarLocalUsuario(lat_padrao,long_padrao);
